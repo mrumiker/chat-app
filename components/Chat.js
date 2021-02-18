@@ -24,6 +24,12 @@ export default class Chat extends Component {
             avatar: 'https://placeimg.com/140/140/any',
           },
         },
+        {
+          _id: 2,                         //System Message
+          text: 'This is a system message',
+          createdAt: new Date(),
+          system: true,
+        },
       ]
     })
   }
