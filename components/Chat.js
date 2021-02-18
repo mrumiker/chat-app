@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Platform, KeyboardAvoidingView } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
 export default class Chat extends Component {
   constructor() {
@@ -10,7 +10,7 @@ export default class Chat extends Component {
     }
   }
   componentDidMount() {
-    let { name } = this.props.route.params; //This is in cDM() to prevent error message
+    let { name } = this.props.route.params; //This is in cDM() to prevent warning message
     this.props.navigation.setOptions({ title: name }); //This sets the screen title to the user's name
     this.setState({                   //Set up initial message state
       messages: [
@@ -40,6 +40,19 @@ export default class Chat extends Component {
     }));
   }
 
+  renderBubble(props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#8a95a5', //set user's bubble color here
+          }
+        }}
+      />
+    )
+  }
+
   render() {
 
     let { color } = this.props.route.params; //Selected color from previous screen assigned to variable
@@ -47,6 +60,7 @@ export default class Chat extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: color, }} /* Background color is applied here */>
         <GiftedChat
+          renderBubble={this.renderBubble.bind(this)}
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
           user={{
