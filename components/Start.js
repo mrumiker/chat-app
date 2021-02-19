@@ -27,10 +27,10 @@ export default class Start extends Component {
             />
             <Text style={styles.choose}>Choose Background Color:</Text>
             <View style={styles.colorsContainer} /*this contains the colored circles*/>
-              <TouchableOpacity style={[styles.circle, styles.circ1]} onPress={() => this.setState({ color: styles.circ1.backgroundColor })} />
-              <TouchableOpacity style={[styles.circle, styles.circ2]} onPress={() => this.setState({ color: styles.circ2.backgroundColor })} />
-              <TouchableOpacity style={[styles.circle, styles.circ3]} onPress={() => this.setState({ color: styles.circ3.backgroundColor })} />
-              <TouchableOpacity style={[styles.circle, styles.circ4]} onPress={() => this.setState({ color: styles.circ4.backgroundColor })} />
+              <TouchableOpacity style={[styles.circle, styles.circ1]} onPress={() => this.setState({ color: styles.circ1.backgroundColor })} accessible={true} accessibilityLabel="black" accessibilityHint="choose a black background for chat screen" accessibilityRole="button" />
+              <TouchableOpacity style={[styles.circle, styles.circ2]} onPress={() => this.setState({ color: styles.circ2.backgroundColor })} accessible={true} accessibilityLabel="eggplant" accessibilityHint="choose an eggplant background for chat screen" accessibilityRole="button" />
+              <TouchableOpacity style={[styles.circle, styles.circ3]} onPress={() => this.setState({ color: styles.circ3.backgroundColor })} accessible={true} accessibilityLabel="pistachio" accessibilityHint="choose a pistachio background for chat screen" accessibilityRole="button" />
+              <TouchableOpacity style={[styles.circle, styles.circ4]} onPress={() => this.setState({ color: styles.circ4.backgroundColor })} accessible={true} accessibilityLabel="slate" accessibilityHint="choose a slate background for chat screen" accessibilityRole="button" />
             </View>
             <TouchableOpacity
               style={styles.button}
