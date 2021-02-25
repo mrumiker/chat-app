@@ -50,13 +50,13 @@ export default class Chat extends Component {
         messages: [],
       });
       this.unsubscribe = this.referenceChatMessages
-        .orderBy("createdAt", "desc").
-        onSnapshot(this.onCollectionUpdate);
+        .orderBy("createdAt", "desc")
+        .onSnapshot(this.onCollectionUpdate);
     });
   }
 
   componentWillUnmount() {
-    this.authUnsubscribe();
+    this.authUnsubscribe(); //stop listening for changes
     this.unsubscribe();
   }
 
@@ -66,7 +66,7 @@ export default class Chat extends Component {
     querySnapshot.forEach((doc) => {
       //get the QuerySnapshot's data
       let data = doc.data();
-      messages.push({
+      messages.push({     //get the messages from the database and send them to state
         _id: data._id,
         text: data.text,
         createdAt: data.createdAt.toDate(),
@@ -77,9 +77,9 @@ export default class Chat extends Component {
         },
       });
     });
-    this.setState(
+    this.setState({
       messages,
-    );
+    });
   };
 
   addMessage = () => { //add new message to database
@@ -94,10 +94,10 @@ export default class Chat extends Component {
 
   onSend(messages = []) {
     this.setState((previousState) => ({
-      messages: GiftedChat.append(previousState.messages, messages), //custom function to add new messages
+      messages: GiftedChat.append(previousState.messages, messages), //set new message to state
     }),
       () => {
-        this.addMessage();
+        this.addMessage(); //get new message added to database
       });
   }
 
@@ -116,7 +116,6 @@ export default class Chat extends Component {
 
   render() {
     let { color } = this.props.route.params; //Selected color from previous screen assigned to variable
-
     return (
       <View style={{ flex: 1, backgroundColor: color, }} /* Background color is applied here */>
         <GiftedChat
@@ -124,6 +123,7 @@ export default class Chat extends Component {
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
           user={this.state.user}
+          renderUsernameOnMessage={true}
         />
         { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /*Avoids keyboard glitch on Android*/ /> : null}
       </View>
