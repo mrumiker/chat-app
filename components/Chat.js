@@ -2,12 +2,39 @@ import React, { Component } from 'react';
 import { View, Platform, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
+const firebase = require('firebase');
+require('firebase/firestore');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC2LpmwWkeTS6Y5E0VPeChD4eWJEl-Bbc8",
+  authDomain: "chat-app-8588d.firebaseapp.com",
+  projectId: "chat-app-8588d",
+  storageBucket: "chat-app-8588d.appspot.com",
+  messagingSenderId: "921934364251",
+  appId: "1:921934364251:web:89eae9e5e7b4e5c32a897e",
+  measurementId: "G-2ZQBNYQ6G9",
+}
+
 export default class Chat extends Component {
   constructor() {
     super();
     this.state = {
       messages: [],
     }
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2LpmwWkeTS6Y5E0VPeChD4eWJEl-Bbc8",
+      authDomain: "chat-app-8588d.firebaseapp.com",
+      projectId: "chat-app-8588d",
+      storageBucket: "chat-app-8588d.appspot.com",
+      messagingSenderId: "921934364251",
+      appId: "1:921934364251:web:89eae9e5e7b4e5c32a897e",
+      measurementId: "G-2ZQBNYQ6G9",
+    }
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    this.referenceChatMessages = firebase.firestore().collection('messages');
+
   }
   componentDidMount() {
     let { name } = this.props.route.params; //This is in cDM() to prevent warning message
@@ -25,7 +52,7 @@ export default class Chat extends Component {
           },
         },
         {
-          _id: 2,                         //System Message
+          _id: 2,                         //System Message announcing user has entered the chat
           text: `${name} has entered the chat`,
           createdAt: new Date(),
           system: true,
