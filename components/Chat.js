@@ -174,7 +174,7 @@ export default class Chat extends Component {
         <InputToolbar
           {...props}
         />
-      )
+      );
     }
   }
 
@@ -188,6 +188,7 @@ export default class Chat extends Component {
           onSend={messages => this.onSend(messages)}
           user={this.state.user}
           renderUsernameOnMessage={true}
+          renderInputToolbar={(props) => this.renderInputToolbar(props)}
         />
         { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /*Avoids keyboard glitch on Android*/ /> : null}
       </View>
