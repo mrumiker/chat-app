@@ -62,23 +62,23 @@ export default class Chat extends Component {
             .onSnapshot(this.onCollectionUpdate);
         });
       } else {
-        console.log('offline'); //if offline, get messages from async storage
+        console.log('offline');
         this.setState({
           isConnected: false,
         });
-        this.getMessages();
+        this.getMessages(); //if offline, get messages from async storage
         Alert.alert('You are offline');
       }
     });
-
-
-
     //this.deleteMessages();
   }
 
   componentWillUnmount() {
-    this.authUnsubscribe(); //stop listening for changes
-    this.unsubscribe();
+    if (!this.state.isConnected) {
+    } else {
+      this.authUnsubscribe(); //stop listening for changes
+      this.unsubscribe();
+    }
   }
 
   onCollectionUpdate = (querySnapshot) => {
