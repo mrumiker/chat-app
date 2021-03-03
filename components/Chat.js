@@ -32,41 +32,47 @@ export default class Chat extends Component {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-    this.referenceChatMessages = firebase.firestore().collection('messages'); //create reference to access messages collection
   }
 
   componentDidMount() {
     let { name } = this.props.route.params; //This is in cDM() to prevent warning message
     this.props.navigation.setOptions({ title: name }); //This sets the screen title to the user's name
-    this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        firebase.auth().signInAnonymously();
-      }
-      this.setState({
-        user: {
-          _id: user.uid,
-          name,
-          avatar: 'https://placeimg.com/140/140/any',
-        },                  //Set up initial state
-        messages: [],
-      });
-      this.unsubscribe = this.referenceChatMessages
-        .orderBy("createdAt", "desc")
-        .onSnapshot(this.onCollectionUpdate);
-    });
-
     NetInfo.fetch().then(connection => {
       if (connection.isConnected) {
         console.log('online');
         this.setState({
           isConnected: true,
         });
+        this.referenceChatMessages = firebase.firestore().collection('messages'); //create reference to access messages collection
+
+        this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+          if (!user) {
+            firebase.auth().signInAnonymously();
+          }
+          this.setState({
+            user: {
+              _id: user.uid,
+              name,
+              avatar: 'https://placeimg.com/140/140/any',
+            },                  //Set up initial state
+            messages: [],
+          });
+          this.unsubscribe = this.referenceChatMessages
+            .orderBy("createdAt", "desc")
+            .onSnapshot(this.onCollectionUpdate);
+        });
       } else {
         console.log('offline'); //if offline, get messages from async storage
+        this.setState({
+          isConnected: false,
+        });
         this.getMessages();
-        Alert.alert('You are offline  You may read your messages but cannot send new ones');
+        Alert.alert('You are offline');
       }
     });
+
+
+
     //this.deleteMessages();
   }
 
@@ -110,7 +116,7 @@ export default class Chat extends Component {
   async getMessages() {
     let messages = '';
     try {
-      messages = await AsyncStorage.getItem('messages').then(((res) => console.log(res))) || [];
+      messages = await AsyncStorage.getItem('messages') || [];
       this.setState({
         messages: JSON.parse(messages),
       });
@@ -142,9 +148,9 @@ export default class Chat extends Component {
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages), //set new message to state
     }),
-      () => this.addMessage(), //new message added to database
       () => {
-        this.saveMessages(); //save messages in async storahe
+        this.addMessage(), //new message added to database
+          this.saveMessages() //save messages in async storage
       });
   }
 
