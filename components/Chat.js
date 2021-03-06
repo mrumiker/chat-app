@@ -118,7 +118,7 @@ export default class Chat extends Component {
       text: message.text || '',
       createdAt: message.createdAt,
       user: message.user,
-      image: message.image || null,
+      image: message.image || '',
       location: message.location || null,
     });
   }

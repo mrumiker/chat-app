@@ -13,7 +13,71 @@ export default class CustomActions extends Component {
     super();
   }
 
-  getLocation = async () => {
+  pickImage = async () => { //choose an image from user's phone
+    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    try {
+      if (status === 'granted') {
+        const result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images, //only allow images
+        }).catch(error => console.log(error));
+
+        if (!result.cancelled) {
+          const imageUrl = await this.uploadImage(result.uri);
+          this.props.onSend({ image: imageUrl });
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  takePhoto = async () => {
+    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY, Permissions.CAMERA);
+    try {
+      if (status === 'granted') {
+
+        let result = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        }).catch(error => console.log(error));
+
+        if (!result.cancelled) {
+          const imageUrl = await this.uploadImage(result.uri);
+          this.props.onSend({ image: imageUrl });
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  uploadImage = async (uri) => { //upload image to Firebase
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    const imageNameBefore = uri.split("/");
+    const imageName = imageNameBefore[imageNameBefore.length - 1];
+
+    const ref = firebase.storage().ref().child(`images/${imageName}`);
+
+    const snapshot = await ref.put(blob);
+
+    blob.close();
+
+    return await snapshot.ref.getDownloadURL();
+  }
+
+  getLocation = async () => { //get user's location and send in a chat message
     try {
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
       if (status === 'granted') {
@@ -47,10 +111,10 @@ export default class CustomActions extends Component {
         switch (buttonIndex) {
           case 0:
             console.log('user wants to pick an image');
-            return;
+            return this.pickImage();
           case 1:
             console.log('user wants to take a photo');
-            return;
+            return this.takePhoto();
           case 2:
             console.log('user wants to get their location');
             return this.getLocation();
