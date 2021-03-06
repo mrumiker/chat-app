@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import CustomActions from './CustomActions';
 import { View, Platform, KeyboardAvoidingView, Alert } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
+import MapView from 'react-native-maps';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -19,7 +21,10 @@ export default class Chat extends Component {
         avatar: '',
       },
       isConnected: false,
+      image: null,
+      location: null,
     }
+
     const firebaseConfig = {
       apiKey: "AIzaSyC2LpmwWkeTS6Y5E0VPeChD4eWJEl-Bbc8",
       authDomain: "chat-app-8588d.firebaseapp.com",
@@ -37,6 +42,7 @@ export default class Chat extends Component {
   componentDidMount() {
     let { name } = this.props.route.params; //This is in cDM() to prevent warning message
     this.props.navigation.setOptions({ title: name }); //This sets the screen title to the user's name
+
     NetInfo.fetch().then(connection => {
       if (connection.isConnected) {
         console.log('online');
@@ -96,6 +102,8 @@ export default class Chat extends Component {
           name: data.user.name,
           avatar: data.user.avatar,
         },
+        image: data.image || null,
+        location: data.location || null,
       });
     });
     this.setState({
@@ -107,13 +115,15 @@ export default class Chat extends Component {
     const message = this.state.messages[0];
     this.referenceChatMessages.add({
       _id: message._id,
-      text: message.text,
+      text: message.text || '',
       createdAt: message.createdAt,
       user: message.user,
+      image: message.image || null,
+      location: message.location || null,
     });
   }
 
-  async getMessages() {
+  async getMessages() { //get messages from async storage and save to state (offline use)
     let messages = '';
     try {
       messages = await AsyncStorage.getItem('messages') || [];
@@ -125,7 +135,7 @@ export default class Chat extends Component {
     }
   }
 
-  async saveMessages() {
+  async saveMessages() { //save messages to async storage for offline viewing
     try {
       await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
     } catch (error) {
@@ -133,7 +143,7 @@ export default class Chat extends Component {
     }
   };
 
-  async deleteMessages() {
+  async deleteMessages() { //delete messages from async storage (for dev purposes)
     try {
       await AsyncStorage.removeItem('messages');
       this.setState({
@@ -167,7 +177,7 @@ export default class Chat extends Component {
     )
   }
 
-  renderInputToolbar(props) {
+  renderInputToolbar(props) { //text input is rendered only if connected 
     if (!this.state.isConnected) {
     } else {
       return (
@@ -178,17 +188,48 @@ export default class Chat extends Component {
     }
   }
 
+  renderCustomActions = (props) => { //"+" menu
+    return <CustomActions {...props} />
+  }
+
+  renderCustomView = (props) => { // map view
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          showsUserLocation={true}
+          style={{
+            width: 150,
+            height: 100,
+            borderRadius: 13,
+            margin: 3
+          }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     let { color } = this.props.route.params; //Selected color from previous screen assigned to variable
     return (
       <View style={{ flex: 1, backgroundColor: color, }} /* Background color is applied here */>
         <GiftedChat
-          renderBubble={this.renderBubble.bind(this)}
           messages={this.state.messages}
+          isConnected={this.state.isConnected}
           onSend={messages => this.onSend(messages)}
           user={this.state.user}
+          renderBubble={this.renderBubble.bind(this)}
           renderUsernameOnMessage={true}
-          renderInputToolbar={(props) => this.renderInputToolbar(props)}
+          renderInputToolbar={props => this.renderInputToolbar(props)}
+          renderActions={this.renderCustomActions} // handles "+" menu
+          renderCustomView={this.renderCustomView} //handles map view, if there is one
         />
         { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /*Avoids keyboard glitch on Android*/ /> : null}
       </View>
