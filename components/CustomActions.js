@@ -100,7 +100,7 @@ export default class CustomActions extends Component {
   };
 
   onActionPress = () => {
-    const options = ['Choose From Library', 'Take Picture', 'Send Location', 'Cancel'];
+    const options = ['Choose Image From Library', 'Take Picture', 'Send Location', 'Cancel'];
     const cancelButtonIndex = options.length - 1;
     this.context.actionSheet().showActionSheetWithOptions(
       {
@@ -126,7 +126,13 @@ export default class CustomActions extends Component {
 
   render() {
     return (
-      <TouchableOpacity style={[styles.container]} onPress={this.onActionPress}>
+      <TouchableOpacity
+        style={[styles.container]}
+        accessible={true}
+        accessibilityLabel='Choose an Option'
+        accessibilityHint="Lets you choose to send a picture or your current location."
+        onPress={this.onActionPress}
+      >
         <View style={[styles.wrapper, this.props.wrapperStyle]}>
           <Text style={[styles.iconText, this.props.iconTextStyle]}>+</Text>
         </View>
