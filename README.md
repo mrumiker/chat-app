@@ -6,7 +6,7 @@ Written on React Native and developed with Expo.
 
 Put in your name, choose a background color, and start chatting with your friends!
 
-[!Start Screen](/img/StartScreen.png) [!Chat Screen](/img/ChatScreen.png) 
+![Start Screen](/img/StartScreen.png) ![Chat Screen](/img/ChatScreen.png) 
 
 ## Features
 
