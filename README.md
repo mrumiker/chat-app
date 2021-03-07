@@ -8,10 +8,14 @@ Put in your name, choose a background color, and start chatting with your friend
 
 ## Features
 
-**Start Screen** where you can choose a username and a custom background color
-**Chat Screen** where you can send chat messages to friends, photos (from your camera or your media gallery), or a map of your location
-Stores your messages in Google Firebase cloud storage
-When offline, you can still see your messages, thanks to async storage
+**Start Screen** where you can choose a username and a custom background color.
+
+**Chat Screen** where you can send chat messages to friends, photos (from your camera or your media gallery), or a map of your location.
+
+Stores your messages in Google Firebase cloud storage.
+
+When offline, you can still see your messages, thanks to async storage.
+
 _Chatterbox will ask for your permission before accessing your device's hardware or your photos._
 
 ## Setup
