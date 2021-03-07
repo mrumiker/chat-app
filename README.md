@@ -6,6 +6,8 @@ Written on React Native and developed with Expo.
 
 Put in your name, choose a background color, and start chatting with your friends!
 
+[!Start Screen](/img/StartScreen.png) [!Chat Screen](/img/ChatScreen.png) 
+
 ## Features
 
 **Start Screen** where you can choose a username and a custom background color.
@@ -28,8 +30,8 @@ Install Expo using the CLI ```$ npm install --global expo-cli```
 To use the app on your mobile device, download Expo from your App Store
 
 To use a mobile simulator, use 
-Android Studio for Android
-iOS simulator for iPhone/iPad
+[Android Studio]https://docs.expo.io/workflow/android-studio-emulator/ for Android
+[iOS Simulator]https://docs.expo.io/workflow/ios-simulator/ for iPhone/iPad
 
 ### Install Dependencies
 
