@@ -17,7 +17,7 @@ export default class Start extends Component {
     return (
       <ImageBackground source={image} style={styles.image} /* background image */>
         <View style={styles.container}>
-          <Text style={styles.title} /*App Title*/>ChatterBox</Text>
+          <Text style={styles.title} /*App Title*/>TalkToFriends</Text>
           <View style={styles.inputContainer}>
             <TextInput                                    //User inputs name here
               style={styles.input}
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 45,
     color: '#fff',
     fontWeight: '600',
-    letterSpacing: 10,
+    letterSpacing: 3,
   },
   inputContainer: {
     position: 'relative',
