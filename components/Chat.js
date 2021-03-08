@@ -163,12 +163,13 @@ export default class Chat extends Component {
   }
 
   renderBubble(props) {
+    console.log(Object.keys(props));
     return (
       <Bubble
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#8a95a5', //set user's bubble color here
+            backgroundColor: '#a48ba6', //set user's bubble color here
           }
         }}
       />
