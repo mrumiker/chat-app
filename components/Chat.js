@@ -223,7 +223,7 @@ export default class Chat extends Component {
           isConnected={this.state.isConnected}
           onSend={messages => this.onSend(messages)}
           user={this.state.user}
-          renderBubble={this.renderBubble.bind(this)}
+          renderBubble={this.renderBubble}
           renderUsernameOnMessage={true}
           renderInputToolbar={props => this.renderInputToolbar(props)}
           renderActions={this.renderCustomActions} // handles "+" menu

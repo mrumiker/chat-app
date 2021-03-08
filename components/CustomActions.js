@@ -65,7 +65,7 @@ export default class CustomActions extends Component {
       xhr.send(null);
     });
 
-    const imageName = uri.split("/").reverse()[0];
+    const imageName = uri.split("/").pop();
 
     const ref = firebase.storage().ref().child(`images/${imageName}`);
 
