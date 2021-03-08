@@ -129,8 +129,8 @@ export default class CustomActions extends Component {
       <TouchableOpacity
         style={[styles.container]}
         accessible={true}
-        accessibilityLabel='Choose an Option'
-        accessibilityHint="Lets you choose to send a picture or your current location."
+        accessibilityLabel='Open options menu.'
+        accessibilityRole="spinbutton"
         onPress={this.onActionPress}
       >
         <View style={[styles.wrapper, this.props.wrapperStyle]}>

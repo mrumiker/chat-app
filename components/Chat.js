@@ -13,7 +13,6 @@ export default class Chat extends Component {
   constructor() {
     super();
     this.state = {
-      uid: 0,
       messages: [],
       user: {
         _id: '',
@@ -89,8 +88,7 @@ export default class Chat extends Component {
 
   onCollectionUpdate = (querySnapshot) => {
     const messages = [];
-    //go through each doc
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc) => { //go through each doc
       //get the QuerySnapshot's data
       let data = doc.data();
       messages.push({     //get the messages from the database and send them to state
@@ -109,7 +107,7 @@ export default class Chat extends Component {
     this.setState({
       messages,
     });
-  };
+  }
 
   addMessage = () => { //add new message to database
     const message = this.state.messages[0];
@@ -154,7 +152,7 @@ export default class Chat extends Component {
     }
   }
 
-  onSend(messages = []) {
+  onSend(messages = []) { // this is deployed whenever the user sends a new message
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages), //set new message to state
     }),
@@ -188,11 +186,11 @@ export default class Chat extends Component {
     }
   }
 
-  renderCustomActions = (props) => { //"+" menu
+  renderCustomActions = (props) => { //"+" menu for special message options
     return <CustomActions {...props} />
   }
 
-  renderCustomView = (props) => { // map view
+  renderCustomView = (props) => { // map view for sharing user location
     const { currentMessage } = props;
     if (currentMessage.location) {
       return (

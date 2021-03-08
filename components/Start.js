@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ImageBackground } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const image = require('../img/BackgroundImage.png');
@@ -35,6 +35,9 @@ export default class Start extends Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => this.props.navigation.navigate('Chat', { name: this.state.name, color: this.state.color })} //Chat button takes user to next screen and passes name and color info
+              accessible={true}
+              accessibilityLabel="Start Chatting"
+              accessibilityRole="button"
             >
               <Text style={styles.buttonText}>Start Chatting</Text>
             </TouchableOpacity>
